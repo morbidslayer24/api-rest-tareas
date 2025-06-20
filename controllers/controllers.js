@@ -25,8 +25,11 @@ function getTareaById(req, res) {
 
 // Crear una nueva tarea
 function createTarea(req, res) {
+  if (!req.body.nombre) {
+    return res.status(400).json({ mensaje: 'El nombre es obligatorio' });
+  }
   const nueva = {
-    id: tareas.length + 1,
+    id: tareas.length ? Math.max(...tareas.map(t => t.id)) + 1 : 1,
     nombre: req.body.nombre
   };
   tareas.push(nueva);
@@ -37,6 +40,9 @@ function createTarea(req, res) {
 function updateTarea(req, res) {
   const tarea = tareas.find(t => t.id === parseInt(req.params.id));
   if (!tarea) return res.status(404).json({ mensaje: 'No encontrada' });
+  if (!req.body.nombre) {
+    return res.status(400).json({ mensaje: 'El nombre es obligatorio' });
+  }
   tarea.nombre = req.body.nombre;
   res.json(tarea);
 }
