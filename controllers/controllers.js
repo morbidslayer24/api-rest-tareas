@@ -28,6 +28,9 @@ function createTarea(req, res) {
   if (!req.body.nombre) {
     return res.status(400).json({ mensaje: 'El nombre es obligatorio' });
   }
+  if (tareas.some(t => t.nombre.toLowerCase() === req.body.nombre.toLowerCase())) {
+    return res.status(400).json({ mensaje: 'Ya existe una tarea con ese nombre' });
+  }
   const nueva = {
     id: tareas.length ? Math.max(...tareas.map(t => t.id)) + 1 : 1,
     nombre: req.body.nombre
@@ -35,7 +38,6 @@ function createTarea(req, res) {
   tareas.push(nueva);
   res.status(201).json(nueva);
 }
-
 // Actualizar una tarea existente
 function updateTarea(req, res) {
   const tarea = tareas.find(t => t.id === parseInt(req.params.id));
@@ -63,10 +65,45 @@ function deleteTarea(req, res) {
   res.json({ mensaje: 'Tarea eliminada' });
 }
 
+// Marcar una tarea como completada o pendiente
+function marcarCompletada(req, res) {
+  const id = parseInt(req.params.id);
+  const tarea = tareas.find(t => t.id === id);
+  if (!tarea) return res.status(404).json({ mensaje: 'No encontrada' });
+  tarea.completada = !tarea.completada;
+  res.json(tarea);
+}
+
+//filtros para tareas completadas y pendientes
+function tareasCompletadas(req, res) {
+  res.json(tareas.filter(t => t.completada));
+}
+function tareasPendientes(req, res) {
+  res.json(tareas.filter(t => !t.completada));
+}
+
+// Obtener la primera tarea
+function ultimaTarea(req, res) {
+  if (tareas.length === 0) return res.status(404).json({ mensaje: 'No hay tareas' });
+  res.json(tareas[tareas.length - 1]);
+}
+
+// Obtener tareas por rango de IDs
+function tareasPorRango(req, res) {
+  const desde = parseInt(req.query.desde) || 1;
+  const hasta = parseInt(req.query.hasta) || tareas.length;
+  res.json(tareas.filter(t => t.id >= desde && t.id <= hasta));
+}
+// ...existing code...
 module.exports = {
   getTareas,
   getTareaById,
   createTarea,
   updateTarea,
-  deleteTarea
+  deleteTarea,
+  marcarCompletada,
+  tareasCompletadas,
+  tareasPendientes,
+  ultimaTarea,
+  tareasPorRango
 };

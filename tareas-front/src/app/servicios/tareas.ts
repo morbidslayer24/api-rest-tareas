@@ -30,4 +30,16 @@ export class TareasService {
   return this.http.put(`${this.apiUrl}/${id}`, { nombre });
 }
 
+contarTareas(): Observable<any> {
+  return this.http.get('https://api-rest-tareas-ekv1.onrender.com/api/tareas-contar');
+}
+
+buscarTareas(texto: string): Observable<any> {
+  return this.http.get(`https://api-rest-tareas-ekv1.onrender.com/api/tareas-buscar?q=${encodeURIComponent(texto)}`);
+}
+
+resetTareas(): Observable<any> {
+  return this.http.post('https://api-rest-tareas-ekv1.onrender.com/api/tareas-reset', {});
+}
+
 }

@@ -25,7 +25,11 @@ export class App implements OnInit {
   idActualizar: number | null = null;
   nombreActualizar = '';
   idEliminar: number | null = null;
-  seccion: string = ''; // <-- Nueva variable para controlar la sección visible
+  seccion: string = ''; 
+  totalTareas: number | null = null;
+  textoBusqueda: string = '';
+  resultadoBusqueda: any[] = [];
+  mensajeReset: string = '';
 
   constructor(private tareasService: TareasService) {}
 
@@ -68,4 +72,21 @@ export class App implements OnInit {
       this.cargarTareas();
     });
   }
+
+  contarTareas() {
+  this.tareasService.contarTareas().subscribe(data => this.totalTareas = data.total);
+}
+
+buscarTareas() {
+  if (!this.textoBusqueda) return;
+  this.tareasService.buscarTareas(this.textoBusqueda).subscribe(data => this.resultadoBusqueda = data);
+}
+
+resetTareas() {
+  this.tareasService.resetTareas().subscribe(data => {
+    this.mensajeReset = data.mensaje;
+    this.cargarTareas();
+    setTimeout(() => this.mensajeReset = '', 2000);
+  });
+}
 }

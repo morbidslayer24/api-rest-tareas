@@ -59,3 +59,46 @@
     <button mat-raised-button color="warn" (click)="eliminar(idEliminar)">Eliminar</button>
   </mat-card>
 </div>
+
+<!-- ...existing code... -->
+
+<div class="botones-nav">
+  <button mat-raised-button color="primary" (click)="mostrarSeccion('listar')">Mostrar todas las tareas</button>
+  <button mat-raised-button color="accent" (click)="mostrarSeccion('agregar')">Agregar tarea</button>
+  <button mat-raised-button color="warn" (click)="mostrarSeccion('actualizar')">Actualizar tarea</button>
+  <button mat-raised-button color="warn" (click)="mostrarSeccion('eliminar')">Eliminar tarea</button>
+  <button mat-stroked-button color="primary" (click)="contarTareas()">Contar tareas</button>
+  <button mat-stroked-button color="accent" (click)="mostrarSeccion('buscar')">Buscar tarea</button>
+  <button mat-stroked-button color="warn" (click)="resetTareas()">Resetear lista</button>
+</div>
+
+<!-- Mostrar total de tareas -->
+<mat-card *ngIf="totalTareas !== null" class="seccion-card">
+  <h3>Total de tareas: {{ totalTareas }}</h3>
+</mat-card>
+
+<!-- Buscar tareas -->
+<mat-card *ngIf="seccion === 'buscar'" class="seccion-card">
+  <h2>Buscar tareas por nombre</h2>
+  <mat-form-field appearance="fill">
+    <mat-label>Texto a buscar</mat-label>
+    <input matInput [(ngModel)]="textoBusqueda">
+  </mat-form-field>
+  <button mat-raised-button color="primary" (click)="buscarTareas()">Buscar</button>
+  <mat-list *ngIf="resultadoBusqueda.length > 0">
+    <mat-list-item *ngFor="let tarea of resultadoBusqueda">
+      <mat-icon matListIcon color="primary">search</mat-icon>
+      <span style="margin-left: 8px;">{{ tarea.id }} - {{ tarea.nombre }}</span>
+    </mat-list-item>
+  </mat-list>
+  <div *ngIf="resultadoBusqueda.length === 0 && textoBusqueda">
+    <p>No se encontraron tareas.</p>
+  </div>
+</mat-card>
+
+<!-- Mensaje de reset -->
+<mat-card *ngIf="mensajeReset" class="seccion-card">
+  <h3>{{ mensajeReset }}</h3>
+</mat-card>
+
+<!-- ...resto del código existente... -->
