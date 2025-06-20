@@ -44,11 +44,11 @@ function updateTarea(req, res) {
 // Eliminar una tarea
 function deleteTarea(req, res) {
   const id = parseInt(req.params.id);
-  const tarea = tareas.find(t => t.id === id);
-  if (!tarea) {
+  const index = tareas.findIndex(t => t.id === id);
+  if (index === -1) {
     return res.status(404).json({ mensaje: 'No encontrada' });
   }
-  tareas = tareas.filter(t => t.id !== id);
+  tareas.splice(index, 1); // Elimina la tarea en el array original
   res.json({ mensaje: 'Tarea eliminada' });
 }
 
