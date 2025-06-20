@@ -1,9 +1,61 @@
-<h1>Lista de Tareas</h1>
-<ul>
-  <li *ngFor="let tarea of tareas">
-    {{ tarea.nombre }}
-    <button (click)="eliminar(tarea.id)">Eliminar</button>
-  </li>
-</ul>
-<input [(ngModel)]="nuevaTarea" placeholder="Nueva tarea">
-<button (click)="agregar()">Agregar</button>
+<mat-toolbar color="primary">
+  <span>Gestor de Tareas</span>
+</mat-toolbar>
+
+<div style="display: flex; justify-content: center; margin-top: 32px;">
+  <mat-card class="main-card">
+    <h1>Gestor de Tareas</h1>
+    <p style="color: #666;">Proyecto de ejemplo: API REST y frontend Angular para gestionar tareas (listar, agregar, editar y eliminar).</p>
+
+    <div class="botones-nav">
+      <button mat-raised-button color="primary" (click)="mostrarSeccion('listar')">Mostrar todas las tareas</button>
+      <button mat-raised-button color="accent" (click)="mostrarSeccion('agregar')">Agregar tarea</button>
+      <button mat-raised-button color="warn" (click)="mostrarSeccion('actualizar')">Actualizar tarea</button>
+      <button mat-raised-button color="warn" (click)="mostrarSeccion('eliminar')">Eliminar tarea</button>
+    </div>
+  </mat-card>
+</div>
+
+<div style="display: flex; justify-content: center;">
+  <mat-card *ngIf="seccion === 'listar'" class="seccion-card">
+    <h2>Lista de Tareas</h2>
+    <button mat-stroked-button color="primary" (click)="cargarTareas()">Actualizar listado</button>
+    <mat-list>
+      <mat-list-item *ngFor="let tarea of tareas">
+        <mat-icon matListIcon color="primary">assignment</mat-icon>
+        <span style="margin-left: 8px;">{{ tarea.id }} - {{ tarea.nombre }}</span>
+      </mat-list-item>
+    </mat-list>
+  </mat-card>
+
+  <mat-card *ngIf="seccion === 'agregar'" class="seccion-card">
+    <h2>Agregar nueva tarea</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>Nombre de la tarea</mat-label>
+      <input matInput [(ngModel)]="nuevaTarea">
+    </mat-form-field>
+    <button mat-raised-button color="primary" (click)="agregar()">Guardar</button>
+  </mat-card>
+
+  <mat-card *ngIf="seccion === 'actualizar'" class="seccion-card">
+    <h2>Actualizar tarea</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>ID de la tarea</mat-label>
+      <input matInput type="number" [(ngModel)]="idActualizar">
+    </mat-form-field>
+    <mat-form-field appearance="fill">
+      <mat-label>Nuevo nombre</mat-label>
+      <input matInput [(ngModel)]="nombreActualizar">
+    </mat-form-field>
+    <button mat-raised-button color="accent" (click)="actualizarTarea()">Guardar</button>
+  </mat-card>
+
+  <mat-card *ngIf="seccion === 'eliminar'" class="seccion-card">
+    <h2>Eliminar tarea</h2>
+    <mat-form-field appearance="fill">
+      <mat-label>ID de la tarea</mat-label>
+      <input matInput type="number" [(ngModel)]="idEliminar">
+    </mat-form-field>
+    <button mat-raised-button color="warn" (click)="eliminar(idEliminar)">Eliminar</button>
+  </mat-card>
+</div>

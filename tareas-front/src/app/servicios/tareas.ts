@@ -14,6 +14,10 @@ export class TareasService {
     return this.http.get(this.apiUrl);
   }
 
+  getTareaPorId(id: number): Observable<any> {
+  return this.http.get(`${this.apiUrl}/${id}`);
+}
+
   crearTarea(nombre: string): Observable<any> {
     return this.http.post(this.apiUrl, { nombre });
   }
@@ -21,4 +25,9 @@ export class TareasService {
   eliminarTarea(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/${id}`);
   }
+
+  editarTarea(id: number, nombre: string): Observable<any> {
+  return this.http.put(`${this.apiUrl}/${id}`, { nombre });
+}
+
 }
